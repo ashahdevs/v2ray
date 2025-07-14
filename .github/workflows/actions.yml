@@ -1,43 +1,41 @@
-name: Run Python Script and Commit Changes
+name: run main.py
 
 on:
   schedule:
-    - cron: '0 */2 * * *' # At 00:00 on Monday
+    - cron: '0 0 * * 1' # At 00:00 on Monday
 
 jobs:
-  run-script:
+  build:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
 
-      - name: Setup Python
+      - name: checkout repo content
+        uses: actions/checkout@v2 # checkout the repository content to github runner
+
+      - name: setup python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
-
-      - name: Install Requirements
+          python-version: '3.9' # install the python version needed
+          
+      - name: install python packages
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Run Python Script
-        
+          
+      - name: execute py script # run main.py
+        env:
+          SOME_SECRET: ${{ secrets.SOME_SECRET }}
         run: python main.py
-
-      - name: Commit Changes
+          
+      - name: commit files
         run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add -A
-          git diff --cached --quiet || git commit -m "Auto-update: results from main.py"
-
-      - name: Push Changes
+          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
+          
+      - name: push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+          branch: main 
