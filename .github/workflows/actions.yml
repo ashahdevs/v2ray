@@ -2,7 +2,7 @@ name: run main.py
 
 on:
   schedule:
-    - cron: '*/2 * * * *' # Every Monday at 00:00 UTC
+    - cron: '* * * * *' # Every Monday at 00:00 UTC
 
 permissions:
   contents: write
