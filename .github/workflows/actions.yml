@@ -3,7 +3,7 @@ name: run main.py
 on:
   workflow_dispatch:     # ← This enables manual runs from the GitHub UI
   schedule:
-    - cron: '*/2 * * * *' # Every Monday at 00:00 UTC
+    - cron: '0 */4 * * *' # Every Monday at 00:00 UTC
 
 permissions:
   contents: write
