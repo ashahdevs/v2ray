@@ -26,8 +26,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Python Script
-        env:
-          SOME_SECRET: ${{ secrets.SOME_SECRET }}  # Optional: Replace with your actual secrets or remove if unused
+        
         run: python main.py
 
       - name: Commit Changes
