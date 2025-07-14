@@ -1,43 +1,45 @@
-name: run main.py
+name: Run Python Script and Commit Changes
 
 on:
   schedule:
-    - cron: '*/3 * * * *' # At 00:00 on Monday
+    - cron: '*/3 * * * *'  # Runs every 3 hours
+  workflow_dispatch:       # Allows manual triggering from GitHub UI
 
 jobs:
-  build:
+  run-script:
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner
-
-      - name: setup python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13' # install the python version needed
-          
-      - name: install python packages
+          python-version: '3.13'
+
+      - name: Install Requirements
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          
-      - name: execute py script # run main.py
+
+      - name: Run Python Script
         env:
-          SOME_SECRET: ${{ secrets.SOME_SECRET }}
+          SOME_SECRET: ${{ secrets.SOME_SECRET }}  # Optional: Replace with your actual secrets or remove if unused
         run: python main.py
-          
-      - name: commit files
+
+      - name: Commit Changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
           git add -A
-          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
-          
-      - name: push changes
+          git diff --cached --quiet || git commit -m "Auto-update: results from main.py"
+
+      - name: Push Changes
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main 
+          branch: main
