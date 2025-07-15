@@ -36,7 +36,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          git diff-index --quiet HEAD || git commit -m "Update from scheduled run"
+          git diff-index --quiet HEAD || git commit -m "✔️ $(date '+%Y-%m-%d %H:%M:%S')"
 
       - name: Push changes
         run: git push origin main
