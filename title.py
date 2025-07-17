@@ -600,9 +600,13 @@ def check_modify_config(array_configuration, protocol_type, check_connection = T
                 config["params"] = config["params"].strip("&")
                 
                 # Retrieve config network type and security type
-                config_type = dict_params.get('net', 'TCP').upper() if dict_params.get('net') not in [None, ''] else 'TCP'
-                config_secrt = dict_params.get('tls','NA').upper() if dict_params.get('tls') not in [None, ''] else 'NA'
-               
+                #config_type = dict_params.get('net', 'TCP').upper() if dict_params.get('net') not in [None, ''] else 'TCP'
+                #config_secrt = dict_params.get('tls','NA').upper() if dict_params.get('tls') not in [None, ''] else 'NA'
+                try:
+    tls_value = dict_params.get('tls', 'NA')
+    config_secrt = tls_value.upper() if isinstance(tls_value, str) and tls_value.strip() else 'NA'
+except Exception:
+    config_secrt = 'NA'
                 
                 # Modify configuration title based on server and protocol properties
                 config["title"] = f"\U0001F512 VM-{config_type}-{config_secrt} {country_flag} {country_code}-{config['ip']}:{config['port']}"
