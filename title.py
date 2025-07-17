@@ -402,21 +402,14 @@ def check_modify_config(array_configuration, protocol_type, check_connection = T
             dict_params = {}
             
             # Iterate over parameters and split based on key value
-            # Iterate over parameters and split based on key value
             for pair in array_params_input:
                 try:
                     key, value = pair.split("=")
-                    key = re.sub(r"servicename", "serviceName", re.sub(r"headertype", "headerType", re.sub(r"allowinsecure", "allowInsecure", key.lower())))
+                    key = re.sub(r"servicename", "serviceName", re.sub(r"headertype", "headerType", re.sub(r"allowinsecure", "allowInsecure", key.lower()),),)
                     dict_params[key] = value
                 except:
                     pass
 
-# Safe TLS handling
-try:
-    tls_value = dict_params.get('tls', 'NA')
-    config_secrt = tls_value.upper() if isinstance(tls_value, str) and tls_value.strip() else 'NA'
-except Exception:
-    config_secrt = 'NA'
             # Set parameters for servicename and allowinsecure keys
             if (dict_params.get("security", "") in ["reality", "tls"] and dict_params.get("sni", "") == "" and is_valid_domain(config["host"])):
                 dict_params["sni"] = config["host"]
@@ -607,14 +600,9 @@ except Exception:
                 config["params"] = config["params"].strip("&")
                 
                 # Retrieve config network type and security type
-                #config_type = dict_params.get('net', 'TCP').upper() if dict_params.get('net') not in [None, ''] else 'TCP'
-                #config_secrt = dict_params.get('tls','NA').upper() if dict_params.get('tls') not in [None, ''] else 'NA'
-                try:
-    tls_value = dict_params.get('tls', 'NA')
-    config_secrt = tls_value.upper() if isinstance(tls_value, str) and tls_value.strip() else 'NA'
-except Exception:
-    config_secrt = 'NA'
-                
+                config_type = dict_params.get('net', 'TCP').upper() if dict_params.get('net') not in [None, ''] else 'TCP'
+                config_secrt = dict_params.get('tls','NA').upper() if dict_params.get('tls') not in [None, ''] else 'NA'
+
                 # Modify configuration title based on server and protocol properties
                 config["title"] = f"\U0001F512 VM-{config_type}-{config_secrt} {country_flag} {country_code}-{config['ip']}:{config['port']}"
 
