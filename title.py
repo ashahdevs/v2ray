@@ -604,9 +604,7 @@ def check_modify_config(array_configuration, protocol_type, check_connection = T
                 #config_secrt = dict_params.get('tls','NA').upper() if dict_params.get('tls') not in [None, ''] else 'NA'
                 #config_secrt = dict_params['tls'].upper() if isinstance(dict_params.get('tls'), str) and dict_params['tls'] not in [None, ''] else 'NA'
                 tls_value = dict_params.get('tls', 'NA')
-                config_secrt = tls_value.upper() if isinstance(tls_value, str) and tls_value not in ['', None] else 'NA'
-
-
+config_secrt = tls_value.upper() if isinstance(tls_value, str) and tls_value.strip() else 'NA'
                 
                 # Modify configuration title based on server and protocol properties
                 config["title"] = f"\U0001F512 VM-{config_type}-{config_secrt} {country_flag} {country_code}-{config['ip']}:{config['port']}"
