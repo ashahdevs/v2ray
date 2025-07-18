@@ -406,7 +406,8 @@ def check_modify_config(array_configuration, protocol_type, check_connection = T
                 try:
                     key, value = pair.split("=")
                     key = re.sub(r"servicename", "serviceName", re.sub(r"headertype", "headerType", re.sub(r"allowinsecure", "allowInsecure", key.lower()),),)
-                    dict_params[key] = value
+                    #dict_params[key] = value
+                    dict_params[str(key)] = str(value)
                 except:
                     pass
 
@@ -600,8 +601,11 @@ def check_modify_config(array_configuration, protocol_type, check_connection = T
                 config["params"] = config["params"].strip("&")
                 
                 # Retrieve config network type and security type
-                config_type = dict_params.get('net', 'TCP').upper() if dict_params.get('net') not in [None, ''] else 'TCP'
-                config_secrt = dict_params.get('tls','NA').upper() if dict_params.get('tls') not in [None, ''] else 'NA'
+                #config_type = dict_params.get('net', 'TCP').upper() if dict_params.get('net') not in [None, ''] else 'TCP'
+                #config_secrt = dict_params.get('tls','NA').upper() if dict_params.get('tls') not in [None, ''] else 'NA'
+                config_type = str(dict_params.get('net', 'TCP')).upper() if dict_params.get('net') not in [None, ''] else 'TCP'
+                config_secrt = str(dict_params.get('tls', 'NA')).upper() if dict_params.get('tls') not in [None, ''] else 'NA'
+
 
                 # Modify configuration title based on server and protocol properties
                 config["title"] = f"\U0001F512 VM-{config_type}-{config_secrt} {country_flag} {country_code}-{config['ip']}:{config['port']}"
